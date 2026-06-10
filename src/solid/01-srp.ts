@@ -13,8 +13,8 @@ class SubscriptionBloc {
 
 }
 
-// UserBloc ya no gestiona suscripciones
-class UserBloc {
+// UserService: centraliza las peticiones de datos (BD / API)
+class UserService {
 
     loadUser( id: number ) {
         // Simula la carga de un usuario
@@ -26,6 +26,11 @@ class UserBloc {
         console.log('Guardando en base de datos:', user );
     }
 
+}
+
+// UserBloc ya no accede directamente a la base de datos
+class UserBloc {
+
     notifyUser() {
         // Simula el envío de notificaciones
         console.log('Enviando correo a los usuarios');
@@ -35,8 +40,9 @@ class UserBloc {
 
 const userBloc = new UserBloc();
 const subscriptionBloc = new SubscriptionBloc();
+const userService = new UserService();
 
-userBloc.loadUser(10);
-userBloc.saveUser({ id: 10, name: 'Fernando' });
+userService.loadUser(10);
+userService.saveUser({ id: 10, name: 'Fernando' });
 userBloc.notifyUser();
 subscriptionBloc.onAddSubscription(1234);
