@@ -16,7 +16,7 @@ class SubscriptionBloc {
 // UserService: centraliza las peticiones de datos (BD / API)
 class UserService {
 
-    loadUser( id: number ) {
+    getUser( id: number ) {
         // Simula la carga de un usuario
         console.log('Cargando usuario con id:', id);
     }
@@ -38,21 +38,34 @@ class Mailer {
 
 }
 
-// UserBloc ya no envía correos directamente
+// UserBloc coordina el proceso usando inyección de dependencias
 class UserBloc {
 
+    constructor(
+        private userService: UserService,
+        private mailer: Mailer,
+    ) {}
+
+    loadUser( id: number ) {
+        this.userService.getUser( id );
+    }
+
+    saveUser( user: User ) {
+        this.userService.saveUser( user );
+    }
+
     notifyUser() {
-        const mailer = new Mailer();
-        mailer.sendEmail();
+        this.mailer.sendEmail();
     }
 
 }
 
-const userBloc = new UserBloc();
-const subscriptionBloc = new SubscriptionBloc();
 const userService = new UserService();
+const mailer = new Mailer();
+const userBloc = new UserBloc( userService, mailer );
+const subscriptionBloc = new SubscriptionBloc();
 
-userService.loadUser(10);
-userService.saveUser({ id: 10, name: 'Fernando' });
+userBloc.loadUser(10);
+userBloc.saveUser({ id: 10, name: 'Fernando' });
 userBloc.notifyUser();
 subscriptionBloc.onAddSubscription(1234);
