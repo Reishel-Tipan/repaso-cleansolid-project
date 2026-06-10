@@ -28,12 +28,22 @@ class UserService {
 
 }
 
-// UserBloc ya no accede directamente a la base de datos
+// Mailer: clase genérica encargada del envío de correos
+class Mailer {
+
+    sendEmail() {
+        // Simula el envío de notificaciones
+        console.log('Enviando correo a los usuarios');
+    }
+
+}
+
+// UserBloc ya no envía correos directamente
 class UserBloc {
 
     notifyUser() {
-        // Simula el envío de notificaciones
-        console.log('Enviando correo a los usuarios');
+        const mailer = new Mailer();
+        mailer.sendEmail();
     }
 
 }
